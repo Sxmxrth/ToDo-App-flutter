@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
                           TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  for (ToDo todoo in todolist) toDoItem(todo: todoo)
+                  for (ToDo element in todolist) toDoItem(todo: element)
                 ],
               ),
             )
