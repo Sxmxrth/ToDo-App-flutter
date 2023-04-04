@@ -1,34 +1,43 @@
 // ignore_for_file: prefer_const_constructors, camel_case_types, avoid_unnecessary_containers
 
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import 'package:flutter/material.dart';
+import 'package:to_do_app/model/todo.dart';
 
 class toDoItem extends StatelessWidget {
-  const toDoItem({super.key});
+  final ToDo todo;
+  const toDoItem({Key? key, required this.todo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 20),
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          print("Clicked on list item");
+        },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         tileColor: Colors.white,
-        leading: Icon(
-          Icons.check_box,
-          color: Colors.blue[300],
-        ),
+        leading: todo.isDone
+            ? Icon(
+                Icons.check_box,
+                color: Colors.blue[300],
+              )
+            : Icon(Icons.check_box_outline_blank),
         title: Text(
-          "Go to Gym",
+          todo.toDoText!,
           style: TextStyle(
               fontSize: 16,
               color: Colors.black,
-              decoration: TextDecoration.lineThrough),
+              decoration: todo.isDone ? TextDecoration.lineThrough : null),
         ),
-        trailing: Icon(
-          Icons.delete,
-          color: Colors.red,
+        trailing: IconButton(
+          onPressed: () {
+            print("Clicked on delete button");
+          },
+          icon: Icon(
+            Icons.delete,
+            color: Colors.red,
+          ),
         ),
       ),
     );

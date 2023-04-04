@@ -1,10 +1,13 @@
 // ignore_for_file: unused_import, prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:to_do_app/model/todo.dart';
 import 'package:to_do_app/widgets/todo_items.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  Home({super.key});
+
+  final todolist = ToDo.todoList();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class Home extends StatelessWidget {
                           TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  toDoItem(),
+                  for (ToDo todoo in todolist) toDoItem(todo: todoo)
                 ],
               ),
             )
