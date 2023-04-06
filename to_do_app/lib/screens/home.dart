@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:to_do_app/model/todo.dart';
 import 'package:to_do_app/widgets/todo_items.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   final todolist = ToDo.todoList();
 
   @override
@@ -14,30 +19,79 @@ class Home extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: createAppBar(),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(
-          children: [
-            searchBox(),
-            Expanded(
-              child: ListView(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 50, bottom: 20),
-                    child: Text(
-                      "All ToDos",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              children: [
+                searchBox(),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 50, bottom: 20),
+                        child: Text(
+                          "All ToDos",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      for (ToDo element in todolist) toDoItem(todo: element)
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  padding: EdgeInsets.only(left: 20, right: 20),
+                  margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 0.0),
+                          blurRadius: 10,
+                          spreadRadius: 0)
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "Add text to ToDo list",
+                      border: InputBorder.none,
                     ),
                   ),
-                  for (ToDo element in todolist) toDoItem(todo: element)
-                ],
-              ),
-            )
-          ],
-        ),
+                )),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20, right: 20),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        elevation: 10, minimumSize: Size(48, 48)),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  void handleToDoChange(ToDo todo) {
+    todo.isDone = !todo.isDone;
   }
 
   Container searchBox() {
