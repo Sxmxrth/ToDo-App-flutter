@@ -13,6 +13,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final todolist = ToDo.todoList();
+  List<ToDo> foundToDo = [];
+  final controller = TextEditingController();
+
+  void initState() {
+    foundToDo = todolist;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +44,7 @@ class _HomeState extends State<Home> {
                               fontSize: 30, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDo element in todolist)
+                      for (ToDo element in foundToDo)
                         toDoItem(
                           todo: element,
                           onHandleChange: handleToDoChange,
@@ -69,6 +76,7 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextField(
+                    controller: controller,
                     decoration: InputDecoration(
                       hintText: "Add text to ToDo list",
                       border: InputBorder.none,
@@ -78,7 +86,9 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.only(bottom: 20, right: 20),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      listController(controller.text);
+                    },
                     style: ElevatedButton.styleFrom(
                         elevation: 10, minimumSize: Size(48, 48)),
                     child: Icon(
@@ -107,6 +117,30 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void listController(String text) {
+    setState(() {
+      todolist.add(ToDo(
+          id: DateTime.fromMillisecondsSinceEpoch.toString(), toDoText: text));
+    });
+    controller.clear();
+  }
+
+  void runFilter(String keyword) {
+    List<ToDo> results = [];
+    if (keyword.isEmpty) {
+      results = todolist;
+    } else {
+      results = todolist
+          .where((item) =>
+              item.toDoText!.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+    }
+
+    setState(() {
+      foundToDo = results;
+    });
+  }
+
   Container searchBox() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -115,6 +149,7 @@ class _HomeState extends State<Home> {
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
+        onChanged: (value) => runFilter(value),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
           prefixIcon: Icon(
