@@ -37,7 +37,12 @@ class _HomeState extends State<Home> {
                               fontSize: 30, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      for (ToDo element in todolist) toDoItem(todo: element)
+                      for (ToDo element in todolist)
+                        toDoItem(
+                          todo: element,
+                          onHandleChange: handleToDoChange,
+                          onDeleteItem: onDeleteItem,
+                        )
                     ],
                   ),
                 )
@@ -90,8 +95,16 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void onDeleteItem(ToDo todo) {
+    setState(() {
+      todolist.removeAt(todolist.indexOf(todo));
+    });
+  }
+
   void handleToDoChange(ToDo todo) {
-    todo.isDone = !todo.isDone;
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
   }
 
   Container searchBox() {
